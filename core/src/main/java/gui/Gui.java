@@ -4,10 +4,8 @@ import controller.FileChooser;
 
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
-import java.awt.event.ActionListener;
 
-public class Gui implements ActionListener {
+public class Gui {
     private JFrame frame;
     private Dimension sSize = Toolkit.getDefaultToolkit().getScreenSize();
     private Font mainFont = new Font("Verdana", Font.ROMAN_BASELINE, 17);
@@ -34,24 +32,23 @@ public class Gui implements ActionListener {
     private JMenuBar menuBar() {
         JMenuBar menuBar = new JMenuBar();
         menuBar.setBackground(Color.orange);
+
         JMenu fileMenu = new JMenu("File");
         fileMenu.setFont(mainFont);
         fileMenu.setMnemonic('F');
-        JMenuItem openMenuItem = new JMenuItem("Open");
+        menuBar.add(fileMenu);
 
+        JMenuItem openMenuItem = new JMenuItem("Open");
         openMenuItem.addActionListener(new FileChooser(frame));
+        fileMenu.add(openMenuItem);
 
         JMenuItem downloadMenuItem = new JMenuItem("Download");
         downloadMenuItem.addActionListener(new DownloadFrame());
-        JMenuItem closeMenuItem = new JMenuItem("Close");
-        fileMenu.add(openMenuItem);
         fileMenu.add(downloadMenuItem);
-        fileMenu.add(closeMenuItem);
-        menuBar.add(fileMenu);
-        return menuBar;
-    }
 
-    public void actionPerformed(ActionEvent event) {
-        frame.repaint();
+        JMenuItem closeMenuItem = new JMenuItem("Close");
+        fileMenu.add(closeMenuItem);
+
+        return menuBar;
     }
 }
