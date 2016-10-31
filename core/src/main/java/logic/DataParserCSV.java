@@ -23,10 +23,6 @@ public class DataParserCSV {
     public DataParserCSV() {
     }
 
-    public DataParserCSV(File file) {
-        this.file = file;
-    }
-
     public String parseAndConvertData(String text) {
         Pattern timePattern = Pattern.compile("time, \\[\\d+\\]\\D*(\\d+.\\d+)");
         Matcher matcher = timePattern.matcher(text);

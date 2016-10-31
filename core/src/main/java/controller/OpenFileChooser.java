@@ -1,21 +1,14 @@
 package controller;
 
 import gui.Diagram;
-import logic.DataParser;
 import lombok.AllArgsConstructor;
 
 import javax.swing.*;
-import java.awt.*;
 import java.awt.event.ActionEvent;
 import java.awt.event.ActionListener;
-import java.io.File;
-import java.time.LocalDateTime;
-import java.util.HashMap;
-import java.util.Iterator;
-import java.util.Map;
 
 @AllArgsConstructor
-public class FileChooser implements ActionListener {
+public class OpenFileChooser implements ActionListener {
     private JFrame frame;
 
     @Override

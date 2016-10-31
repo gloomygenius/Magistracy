@@ -12,7 +12,7 @@ public class LinkCollectorTest {
     LinkCollector link = new LinkCollector();
 
     @Test
-    public void setTimeTest() {
+    public void setTimeTest() throws Exception {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
         LocalDateTime timer = LocalDateTime.parse("24.02.2000 00:00", formatter);
         LocalDateTime timer1 = LocalDateTime.parse("25.02.2000 21:00", formatter);

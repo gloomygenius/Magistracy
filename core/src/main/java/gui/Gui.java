@@ -1,6 +1,6 @@
 package gui;
 
-import controller.FileChooser;
+import controller.OpenFileChooser;
 
 import javax.swing.*;
 import java.awt.*;
@@ -39,11 +39,11 @@ public class Gui {
         menuBar.add(fileMenu);
 
         JMenuItem openMenuItem = new JMenuItem("Open");
-        openMenuItem.addActionListener(new FileChooser(frame));
+        openMenuItem.addActionListener(new OpenFileChooser(frame));
         fileMenu.add(openMenuItem);
 
         JMenuItem downloadMenuItem = new JMenuItem("Download");
-        downloadMenuItem.addActionListener(new DownloadFrame());
+        downloadMenuItem.addActionListener((event) -> new DownloadFrame().show());
         fileMenu.add(downloadMenuItem);
 
         JMenuItem closeMenuItem = new JMenuItem("Close");

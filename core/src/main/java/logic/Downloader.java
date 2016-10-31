@@ -10,25 +10,21 @@ import java.net.*;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
-
-public abstract class Downloader {
-    static boolean frameControl=false;
-    static JTextArea status;
-    public static String getData(String link, JTextArea linkField) {
-        status=linkField;
+public abstract class Downloader{
+    private static JTextArea status;
+    public static String getData(String link, JTextArea logoutArea) {
+        status=logoutArea;
         CookieHandler.setDefault(new CookieManager(null, CookiePolicy.ACCEPT_ALL));
-        if (frameControl==true){
-
-        }
         return (
                 getResponseFromURL(
-                        parseLink(
+                        getLinkFromResponse(
                                 getResponseFromURL(
-                                        getResponseFromURL(link)))));
+                                        getResponseFromURL(link)
+                                ))));
     }
 
     @SneakyThrows
-    private static String getAuthResponce(String address) {
+    private static String getAuthResponse(String address) {
         status.setText("Открываем авторизованное соединение: " + address);
         URL object = new URL(address);
         HttpURLConnection connection = (HttpURLConnection) object.openConnection();
@@ -40,7 +36,7 @@ public abstract class Downloader {
         return getTextResponse(connection);
     }
 
-    private static String parseLink(String responce) {
+    private static String getLinkFromResponse(String responce) {
         status.setText("Парсим ответ");
         Pattern pattern = Pattern.compile("a href=\\\"(.+)\\\"");
         Matcher matcher = pattern.matcher(responce);
@@ -70,10 +66,10 @@ public abstract class Downloader {
                 return getTextResponse(connection);
             case 302:
                 status.setText("Ответ сервера 302");
-                return (parseLink(getTextResponse(connection)));
+                return (getLinkFromResponse(getTextResponse(connection)));
             case 401:
                 status.setText("Ответ сервера 401");
-                return getAuthResponce(url);
+                return getAuthResponse(url);
             default:
                 status.setText("Ответ сервера "+responseCode);
                 return String.valueOf(responseCode);
@@ -91,7 +87,7 @@ public abstract class Downloader {
                         connection.getInputStream(), encoding))) {
             String nextString;
             while ((nextString = reader.readLine()) != null) {
-                builder.append(nextString + "\r\n");
+                builder.append(nextString).append("\r\n");
             }
         } catch (IOException e) {
             e.printStackTrace();

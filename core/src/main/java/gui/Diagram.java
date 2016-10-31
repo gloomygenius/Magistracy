@@ -2,7 +2,6 @@ package gui;
 
 import javax.swing.*;
 
-import logic.DataParser;
 import logic.DataParserCSV;
 import lombok.Setter;
 import org.jfree.chart.ChartFactory;
