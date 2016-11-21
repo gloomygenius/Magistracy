@@ -2,8 +2,6 @@ package logic;
 
 import lombok.Setter;
 
-import java.io.File;
-import java.io.FileInputStream;
 import java.io.IOException;
 import java.io.InputStream;
 import java.time.LocalDateTime;
@@ -21,36 +19,35 @@ public class LinkCollector {
     public String getLink(String propertyName) throws Exception {
         loadProperty(propertyName);
         checkInputData(propertyName);
-        StringBuilder linkBuilder = new StringBuilder("http://")
-                .append(prop.getProperty("dataSource")).append(".sci.gsfc.nasa.gov/dods/")
-                .append(prop.getProperty("dataSet")).append(".ascii?")
-                .append(prop.getProperty("parameter"))
-                .append("[").append(generateTimeIndex(timeStart)).append(":")
-                .append(generateTimeIndex(timeEnd)).append("]").append("[")
-                .append(genLatIndex(latitude)).append("]").append("[")
-                .append(genLonIndex(longitude)).append("]");
 
-        return linkBuilder.toString();
+        return "http://" +
+                prop.getProperty("dataSource") + ".sci.gsfc.nasa.gov/dods/" +
+                prop.getProperty("dataSet") + ".ascii?" +
+                prop.getProperty("parameter") +
+                "[" + generateTimeIndex(timeStart) + ":" +
+                generateTimeIndex(timeEnd) + "]" + "[" +
+                genLatIndex(latitude) + "]" + "[" +
+                genLonIndex(longitude) + "]";
     }
 
     private void checkInputData(String propName) throws Exception {
         DateTimeFormatter formatter = DateTimeFormatter.ofPattern("dd.MM.yyyy HH:mm");
         LocalDateTime timeStart = LocalDateTime.parse(prop.getProperty("defaultTime"), formatter);
         boolean error=false;
-        StringBuffer errorMassage = new StringBuffer();
+        StringBuilder errorMassage = new StringBuilder();
         if ((this.timeStart.isBefore(timeStart)) || (timeEnd.isAfter(LocalDateTime.now()))
                 ||this.timeStart.isAfter(timeEnd)) {
-            errorMassage.append(propName + ": Неправильная дата\r\n");
+            errorMassage.append(propName).append(": Неправильная дата\r\n");
             error=true;
         }
         if (latitude < Double.parseDouble(prop.getProperty("minLatitude")) ||
                 latitude > Double.parseDouble(prop.getProperty("maxLatitude"))) {
-            errorMassage.append(propName + ": Неправильная широта\r\n");
+            errorMassage.append(propName).append(": Неправильная широта\r\n");
             error=true;
         }
         if (longitude < Double.parseDouble(prop.getProperty("minLongitude")) ||
                 longitude > Double.parseDouble(prop.getProperty("maxLongitude"))) {
-            errorMassage.append(propName + ": Неправильная долгота");
+            errorMassage.append(propName).append(": Неправильная долгота");
             error=true;
         }
         if (error) throw new Exception(errorMassage.toString());

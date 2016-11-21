@@ -1,8 +1,6 @@
 package gui;
 
-import javax.swing.*;
-
-import logic.DataParserCSV;
+import logic.CsvConverter;
 import lombok.Setter;
 import org.jfree.chart.ChartFactory;
 import org.jfree.chart.ChartPanel;
@@ -12,11 +10,11 @@ import org.jfree.data.xy.XYDataset;
 import org.jfree.data.xy.XYSeries;
 import org.jfree.data.xy.XYSeriesCollection;
 
+import javax.swing.*;
 import java.awt.*;
 import java.io.File;
 import java.time.LocalDateTime;
 import java.time.ZoneOffset;
-import java.util.HashMap;
 import java.util.Iterator;
 import java.util.Map;
 
@@ -25,7 +23,7 @@ public class Diagram implements Runnable {
     File file;
     JFrame frame;
 
-    private static JPanel getDiagram(HashMap<LocalDateTime, Double> map, String parameter) {
+    private static JPanel getDiagram(Map<LocalDateTime, Double> map, String parameter) {
         JPanel panel = new JPanel();
         XYSeries series = new XYSeries(parameter);
 
@@ -48,7 +46,7 @@ public class Diagram implements Runnable {
 
     @Override
     public void run() {
-        HashMap<LocalDateTime, Double> map = DataParserCSV.parseFromCSV(file);
+        Map<LocalDateTime, Double> map = CsvConverter.from(file);
         frame.getContentPane().add(BorderLayout.CENTER, Diagram.getDiagram(map, "Parameter"));
         frame.validate();
     }

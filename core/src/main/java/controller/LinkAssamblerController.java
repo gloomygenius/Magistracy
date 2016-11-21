@@ -4,7 +4,6 @@ import gui.DownloadFrame;
 import logic.LinkCollector;
 
 import javax.swing.*;
-import java.text.ParseException;
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
 import java.util.Map;

@@ -1,20 +1,20 @@
 package controller;
 
-import controller.LinkAssamblerController;
 import gui.DownloadFrame;
-import logic.DataParserCSV;
+import logic.CsvConverter;
+import logic.DataParser;
 import logic.Downloader;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileNameExtensionFilter;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.time.LocalDateTime;
+import java.util.Map;
 
-@SuppressWarnings("Duplicates")
 public class DownloadDirectoryChooser {
     private DownloadFrame frame;
     private JTextArea logout;
-    private String data;
     private JFileChooser fileChooser = new JFileChooser();
 
     public DownloadDirectoryChooser(DownloadFrame frame, JTextArea logout) {
@@ -31,21 +31,24 @@ public class DownloadDirectoryChooser {
 
         if (fileChooser.showSaveDialog(null) == JFileChooser.APPROVE_OPTION) {
             new Thread(this::startDownload).start();
-
         }
     }
 
     private void startDownload() {
-        data = Downloader.getData(
+        String data = Downloader.getData(
                 LinkAssamblerController.getLink(frame), logout);
-        DataParserCSV dataParser = new DataParserCSV();
-        data = dataParser.parseAndConvertData(data);
-        try (FileWriter fileWriter = new FileWriter(
-                fileChooser.getSelectedFile().getAbsolutePath()
-                        + "\\" + dataParser.getParameter()
-                        + dataParser.getTimeStart().toString().replace(':', ' ') + ".csv")) {
-            fileWriter.write(data);
-        } catch (IOException e) {
+        DataParser dataParser = new DataParser();
+        Map<LocalDateTime, Double> dataMap = dataParser.parseToMap(data);
+        String csvData = CsvConverter.of(dataMap);
+        String savePath = fileChooser.getSelectedFile().getAbsolutePath() +
+                "\\" +
+                dataParser.getParameter() +
+                dataParser.getTimeStart().toLocalDate().toString().replace(':', ' ') +
+                dataParser.getTimeEnd().toLocalDate().toString().replace(':', ' ') +
+                ".csv";
+        try (FileWriter fileWriter = new FileWriter(savePath)) {
+            fileWriter.write(csvData);
+        } catch(IOException e) {
             e.printStackTrace();
         }
     }
